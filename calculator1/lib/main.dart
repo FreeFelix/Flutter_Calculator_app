@@ -1,3 +1,5 @@
+// TODO: organizing  code in this files  and commenting where it necessary for better maintainability.
+
 import 'package:flutter/material.dart';
 import 'package:math_expressions/math_expressions.dart';
 
@@ -13,8 +15,8 @@ class CalculatorApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Calculator',
       theme: ThemeData(
-        primaryColor: Colors.blue, // Set your primary color
-        hintColor: Colors.orange, // Set your accent color
+        primaryColor: Colors.blue, // Set primary color
+        hintColor: Colors.orange, // Set accent color
         textTheme: const TextTheme(
           headline6: TextStyle(fontSize: 44.0), // Set the headline6 text style
           button: TextStyle(fontSize: 30.0), // Set the button text style
@@ -44,15 +46,14 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   void onButtonPressed(String buttonText) {
     setState(() {
       if (buttonText == '=') {
-        // When "=" is pressed, calculate the result and set the input to the result
+        // TODO: Validate input before calculation (prevent empty or invalid expressions)
         result = _performCalculation();
         input = result; // Set input to the result for further calculations
       } else if (buttonText == 'C') {
-        // Clear the input and result
+        // TODO: Implement a confirmation dialog for clearing input and result
         input = '';
         result = '';
       } else {
-        // Append the pressed button's text to the input
         input += buttonText;
       }
     });
@@ -60,17 +61,14 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
 
   String _performCalculation() {
     try {
-      // Use the 'input' string to evaluate the expression
       final calculatedResult = calculateExpression(input);
       return calculatedResult.toString();
     } catch (e) {
-      // Handle errors during calculation
       return 'Error';
     }
   }
 
   double calculateExpression(String expression) {
-    // Parse and evaluate the expression using 'dart:math' library
     Parser parser = Parser();
     Expression exp = parser.parse(expression);
     ContextModel cm = ContextModel();
@@ -92,8 +90,8 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 23.0, vertical: 18.0),
               decoration: BoxDecoration(
-                border: Border.all(color: Colors.blue), // Add a border for style
-                borderRadius: BorderRadius.circular(12.0), // Optional: Add rounded corners
+                border: Border.all(color: Colors.blue),
+                borderRadius: BorderRadius.circular(12.0),
               ),
               child: TextField(
                 controller: TextEditingController(text: input),
@@ -103,10 +101,11 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                 decoration: const InputDecoration.collapsed(hintText: ''),
               ),
             ),
+            // TODO: Adjusted space between headline and text box.
             const Padding(
-              padding: EdgeInsets.all(120.0),
-              child: SizedBox(height: 2.0),
-            ), // Added space between headline and text box
+              padding: EdgeInsets.all(16.0),
+              child: SizedBox(height: 8.0),
+            ),
             // Buttons row 1
             _buildButtonRow(['7', '8', '9', '/']),
             // Buttons row 2
@@ -130,13 +129,13 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
         children: buttonLabels
             .map(
               (label) => ElevatedButton(
-            onPressed: () => onButtonPressed(label),
-            child: Text(
-              label,
-              style: Theme.of(context).textTheme.button,
-            ),
-          ),
-        )
+                onPressed: () => onButtonPressed(label),
+                child: Text(
+                  label,
+                  style: Theme.of(context).textTheme.button,
+                ),
+              ),
+            )
             .toList(),
       ),
     );
